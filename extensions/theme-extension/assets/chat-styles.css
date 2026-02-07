@@ -1,0 +1,255 @@
+.pf-chat-widget,
+.pf-chat-popup {
+  --pf-primary: #111111;
+  font-family: inherit;
+  color: #111111;
+}
+
+.pf-chat-header {
+  background: var(--pf-primary);
+  color: #ffffff;
+  padding: 12px 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pf-chat-messages {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 12px 16px;
+  background: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pf-chat-message {
+  padding: 10px 12px;
+  border-radius: 12px;
+  max-width: 85%;
+  font-size: 14px;
+}
+
+.pf-chat-message--assistant {
+  background: #ffffff;
+  align-self: flex-start;
+}
+
+.pf-chat-message--user {
+  background: var(--pf-primary);
+  color: #ffffff;
+  align-self: flex-end;
+}
+
+.pf-chat-link {
+  color: var(--pf-primary);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.pf-chat-link:hover {
+  text-decoration: none;
+}
+
+.pf-chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px 16px 0 16px;
+  background: #ffffff;
+  min-height: 32px;
+}
+
+.pf-chat-suggestions--hidden {
+  display: none;
+}
+
+.pf-chat-suggestions-loading {
+  font-size: 12px;
+  color: #999999;
+  padding: 4px 0;
+  font-style: italic;
+}
+
+.pf-chat-suggestion-bubble {
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #333333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  animation: pf-fade-in 0.3s ease;
+}
+
+.pf-chat-suggestion-bubble:hover {
+  background: #e8e8e8;
+  border-color: var(--pf-primary);
+  color: var(--pf-primary);
+}
+
+.pf-chat-suggestion-bubble:active {
+  transform: scale(0.95);
+}
+
+@keyframes pf-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pf-chat-form {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #ffffff;
+}
+
+.pf-chat-input {
+  flex: 1;
+  border: 1px solid #dddddd;
+  border-radius: 999px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.pf-chat-send {
+  background: var(--pf-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pf-chat-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.pf-chat-product {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-decoration: none;
+  color: inherit;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid #eeeeee;
+}
+
+.pf-chat-product img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.pf-chat-product-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pf-chat-product-price {
+  font-size: 12px;
+  color: #666666;
+}
+
+.pf-chat-popup {
+  position: fixed;
+  z-index: 9999;
+}
+
+.pf-chat-popup--bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.pf-chat-popup--bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+.pf-chat-toggle {
+  background: var(--pf-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.pf-chat-panel {
+  width: 320px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  margin-top: 12px;
+}
+
+.pf-chat-popup--open .pf-chat-panel {
+  display: flex;
+}
+
+.pf-chat-close {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Loading spinner */
+.pf-chat-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pf-chat-spinner {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.pf-chat-spinner-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pf-primary);
+  animation: pf-bounce 1.4s infinite ease-in-out both;
+}
+
+.pf-chat-spinner-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.pf-chat-spinner-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes pf-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.sqlite"
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+  refreshToken        String?
+  refreshTokenExpires DateTime?
+}
+
+model Shop {
+  id             String   @id @default(uuid())
+  shop           String   @unique
+  shopDomain     String
+  commissionRate Decimal  @default(0.02)
+  customContext  String?
+  settings       Json?
+  installedAt    DateTime @default(now())
+  lastActiveAt   DateTime?
+
+  @@index([shop])
+}
+
+model Conversation {
+  id            String   @id @default(uuid())
+  shop          String
+  sessionId     String
+  customerId    String?
+  message       String
+  responseText  String?
+  productsShown Json?
+  trackingToken String   @unique
+  createdAt     DateTime @default(now())
+
+  @@index([shop])
+  @@index([trackingToken])
+}
+
+model Conversion {
+  id              String   @id @default(uuid())
+  shop            String
+  conversationId  String?
+  orderId         String   @unique
+  customerId      String?
+  trackingToken   String?
+  orderTotal      Decimal?
+  commissionRate Decimal  @default(0.02)
+  commissionAmount Decimal?
+  createdAt       DateTime @default(now())
+  attributedAt    DateTime @default(now())
+
+  @@index([shop])
+  @@index([trackingToken])
+  @@index([orderId])
+}
+
+model OptimizationJob {
+  id              String   @id @default(uuid())
+  shop            String
+  status          String   // "queued" | "scanning" | "completed" | "failed"
+  totalProducts   Int
+  scannedProducts Int
+  startedAt       DateTime @default(now())
+  completedAt     DateTime?
+
+  @@index([shop])
+  @@index([status])
+}
+
+model ProductAnalysis {
+  id                String   @id @default(uuid())
+  shop              String
+  productId         String   // Shopify GID
+  productHandle     String
+
+  // Analysis scores
+  optimizationScore Int      // 0-100
+  issuesCount       Int
+  issues            Json     // { title: [], description: [], tags: [] }
+
+  // Metadata
+  analyzedAt        DateTime @default(now())
+
+  @@unique([shop, productId])
+  @@index([shop, optimizationScore])
+}
+
+model ProductOptimization {
+  id                String   @id @default(uuid())
+  shop              String
+  productId         String   // Shopify GID
+
+  // AI suggestions (generated on-demand)
+  suggestions       Json     // { title: [...], description: {...}, tags: {...}, seo: {...} }
+
+  // Approval/application status
+  status            String   // "pending" | "approved" | "rejected" | "applied"
+  appliedAt         DateTime?
+
+  // Change tracking
+  originalData      Json     // { title, description, tags, ... }
+  appliedChanges    Json?    // Which fields were changed
+
+  createdAt         DateTime @default(now())
+
+  @@unique([shop, productId])
+  @@index([shop, status])
+}
+
+// Analytics event tracking for understanding app usage
+model AnalyticsEvent {
+  id          String   @id @default(uuid())
+  shop        String
+  event       String   // e.g., "page_view", "feature_used", "button_clicked"
+  category    String   // e.g., "navigation", "optimizer", "chat", "settings"
+  action      String?  // e.g., "generate_suggestions", "apply_changes"
+  label       String?  // Additional context
+  value       Int?     // Numeric value if applicable
+  metadata    Json?    // Additional structured data
+  sessionId   String?  // To group events by session
+  createdAt   DateTime @default(now())
+
+  @@index([shop])
+  @@index([event])
+  @@index([category])
+  @@index([createdAt])
+}
+
+// User feedback collection
+model Feedback {
+  id          String   @id @default(uuid())
+  shop        String
+  type        String   // "bug", "feature_request", "general", "nps"
+  rating      Int?     // 1-10 for NPS, 1-5 for satisfaction
+  message     String
+  page        String?  // Which page they were on
+  metadata    Json?    // Browser info, app version, etc.
+  status      String   @default("new") // "new", "reviewed", "resolved", "archived"
+  createdAt   DateTime @default(now())
+
+  @@index([shop])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Gold ticker settings per shop
+model ShopSettings {
+  id             String   @id @default(cuid())
+  shop           String   @unique
+  karats         String   @default("24,22,21,18,14")
+  colorScheme    String   @default("dark")
+  bgColor        String   @default("#1a1a2e")
+  textColor      String   @default("#e8d44d")
+  tickerSpeed    Int      @default(50)
+  position       String   @default("top")
+  showChange     Boolean  @default(true)
+  currencySymbol String   @default("$")
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

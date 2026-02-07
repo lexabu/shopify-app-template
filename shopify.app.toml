@@ -1,0 +1,33 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+# IMPORTANT: Run `shopify app config link` to connect this to your Shopify Partner app
+# This will replace the client_id below with your actual app's client ID
+
+client_id = "YOUR_CLIENT_ID_HERE"
+name = "My Shopify App"
+application_url = "https://example.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2026-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+[access_scopes]
+# Add the scopes your app needs
+# Common scopes: read_products, write_products, read_orders, write_orders
+# See: https://shopify.dev/docs/api/usage/access-scopes
+scopes = "read_products"
+
+[app_proxy]
+url = "/api/proxy"
+subpath = "my-app"
+prefix = "apps"
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]

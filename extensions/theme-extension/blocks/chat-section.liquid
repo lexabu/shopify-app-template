@@ -1,0 +1,60 @@
+{{ 'chat-styles.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'chat-app.js' | asset_url }}" defer></script>
+
+<div
+  class="pf-chat-widget"
+  data-mode="inline"
+  data-shop-domain="{{ shop.domain }}"
+  data-primary-color="{{ block.settings.primary_color }}"
+  data-welcome-message="{{ block.settings.welcome_message }}"
+  data-placeholder-text="{{ block.settings.placeholder_text }}"
+>
+  <div class="pf-chat-header">
+    <span>{{ block.settings.header_text }}</span>
+  </div>
+  <div class="pf-chat-messages"></div>
+  <div class="pf-chat-suggestions"></div>
+  <form class="pf-chat-form">
+    <input
+      class="pf-chat-input"
+      type="text"
+      placeholder="{{ block.settings.placeholder_text }}"
+      aria-label="Chat message"
+      required
+    >
+    <button class="pf-chat-send" type="submit">Send</button>
+  </form>
+</div>
+
+{% schema %}
+{
+  "name": "Product Finder Chat",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header_text",
+      "label": "Header text",
+      "default": "Product Finder"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary color",
+      "default": "#111111"
+    },
+    {
+      "type": "text",
+      "id": "welcome_message",
+      "label": "Welcome message",
+      "default": "Hi! How can I help you find the perfect product?"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Placeholder text",
+      "default": "Describe what you're looking for..."
+    }
+  ]
+}
+{% endschema %}
